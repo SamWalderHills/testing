@@ -1,9 +1,114 @@
-la la la code code codela la la code code code
 
-My code did not work, this line fixes it
+// Header file stuff (state_machine.h)
+// types
+#typedef state_type // This should probably be an enumeration
 
-line 1
-2 
-and 3!!
-Finished last line
+// Static vars - you could declair these in main, or in a nice state machine setup function.
+static state_type current_state;
+static state_type LED_current_state
 
+// C file stuff (state_machine.c)
+// fist state machie example
+state_type example_SM(state_type current_state){
+    // Just an example
+
+    // Default for the next state
+    next_state = current_state;
+
+    switch (current_state){
+        case startup:
+            // Entry changes
+            set_valve(OPEN);
+            set_LED(OFF);
+            LED_flag = ON;
+
+            // Exit conditions
+            if (power_off == true){
+                next_state = shutdown;
+            }
+            if (something_else == true){
+                next_state = some_other_state;
+            }
+
+        break;
+
+        case shutdown:
+            set_LED(LED_OFF);
+        break;
+
+    }
+
+    // Where do we go?
+    return next_state;
+
+}
+
+
+// Separate LED file
+
+#define LED_OFF = 0;
+#define LED_ON = 1;
+
+#include state_machine.h
+
+// LED state machine
+state_type LED_SM(state_type LED_current_state){
+    // Just an example
+
+    // Default for the next state
+    next_state = LED_current_state;
+
+    switch (LED_current_state){
+        case slow_flash_on:
+            // Entry changes
+            gpio_set(LED, on);
+
+            // Exit conditions
+            if (LED_flag == OFF){
+                next_state = off;
+            }
+            if (time_expired){
+                next_state = slow_flash_off;
+            }
+
+        break;
+
+        case slow_flash_off:
+            // Entry changes
+            gpio_set(LED, off);
+
+            // Exit conditions
+            if (LED_flag == OFF){
+                next_state = off;
+            }
+            if (time_expired){
+                next_state = slow_flash_on;
+            }
+
+        break;
+
+        case off:
+            // Entry changes
+            gpio_set(LED, off);
+
+            // Exit conditions
+            if (LED_flag == ON){
+                next_state = slow_flash_on;
+            }
+        break;
+
+    }
+
+    // Where do we go?
+    return next_state;
+
+}
+
+// LED API functions
+void set_LED(LED_mode){
+    if (LED_mode = LED_ON){
+        LED_flag = OFF;
+    } else {
+        LED_flag = ON;
+    }
+}
