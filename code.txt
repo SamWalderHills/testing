@@ -61,7 +61,12 @@ state_type LED_SM(state_type LED_current_state){
     switch (LED_current_state){
         case slow_flash_on:
             // Entry changes
-            gpio_set(LED, on);
+			if (first_entry_to_this_state() ){
+				gpio_set(LED, on);
+			}
+			
+			// Every hit actions
+			
 
             // Exit conditions
             if (LED_flag == OFF){
@@ -112,3 +117,6 @@ void set_LED(LED_mode){
         LED_flag = ON;
     }
 }
+
+void timer_start(){}
+int  timer_s_elapsed(){}
